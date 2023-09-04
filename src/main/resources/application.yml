@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    password: 12345678
+    username: root
+    url: jdbc:mysql://127.0.0.1:3307/fangtianxia?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+    password:
+server:
+  port: 8000
