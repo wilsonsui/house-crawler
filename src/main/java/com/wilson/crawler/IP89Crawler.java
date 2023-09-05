@@ -23,7 +23,7 @@ public class IP89Crawler extends AbstractCrawler {
         return CrawlerEnum.IP89;
     }
 
-    private Integer pageSize = 79;
+    private Integer pageSize = 50;
 
     @Override
     public List<String> urlList() {

@@ -48,6 +48,60 @@ public class CrawlSchedule {
     @Autowired
     List<AbstractCrawler> abstractCrawlerList;
 
+    @Scheduled(cron = "0/60 * * * * ?")
+    @Async("myExecutor")
+    public void verify() {
+        log.error("校验IP是否可用:开始");
+        VerifyQueue verifyQueue = new VerifyQueue();
+        //取出redis中所有的key
+        Set<String> keys = stringRedisTemplate.keys("*");
+        keys.stream().forEach(key -> {
+            String s = stringRedisTemplate.opsForValue().get(key);
+            ProxyEntity proxyEntity = JSON.parseObject(s, ProxyEntity.class);
+            verifyQueue.add(proxyEntity);
+        });
+        verifyQueue.stream().forEach(obj -> {
+            threadPoolExecutor.execute(() -> {
+                verify(obj);
+            });
+        });
+    }
+
+    //验证代理是否可用方法
+    public void verify(ProxyEntity proxyEntity) {
+        String type = proxyEntity.getType();
+        Proxy.Type proxyType;
+        if ("http".equalsIgnoreCase(type) || "https".equalsIgnoreCase(type)) {
+            proxyType = Proxy.Type.HTTP;
+        } else if ("socket".equalsIgnoreCase(type)) {
+            proxyType = Proxy.Type.SOCKS;
+        } else {
+            proxyType = Proxy.Type.HTTP;
+        }
+
+        Proxy proxy = new Proxy(proxyType, new InetSocketAddress(proxyEntity.getHost(), proxyEntity.getPort()));
+        OkHttpClient client = new OkHttpClient.Builder().proxy(proxy)
+                .connectTimeout(2, TimeUnit.SECONDS)
+                .readTimeout(2, TimeUnit.SECONDS)
+                .addInterceptor(new RandomUserAgentInterceptor()).build();
+        Request request = new Request.Builder()
+                .url("https://www.baidu.com/")
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            if (response.isSuccessful()) {
+                proxyEntity.setUpdateTime(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                stringRedisTemplate.opsForValue().set(proxyEntity.getHost(), JSONObject.toJSONString(proxyEntity));
+            } else {
+                stringRedisTemplate.delete(proxyEntity.getHost());
+            }
+        } catch (IOException e) {
+            stringRedisTemplate.delete(proxyEntity.getHost());
+        } finally {
+        }
+    }
+
+
     /**
      * 爬虫任务
      */
@@ -57,9 +111,9 @@ public class CrawlSchedule {
     public void crawlTask() {
         log.info("爬取代理开始");
         for (AbstractCrawler crawler : abstractCrawlerList) {
-//            if (crawler.getClass() != com.wilson.crawler.FreeProxyListCrawler.class) {
-//                continue;
-//            }
+            if (crawler.getClass() != com.wilson.crawler.XiaoHuanCrawler.class) {
+                continue;
+            }
             for (String url : crawler.urlList()) {
                 String html = CrawlerUtil.doRequest(url);
                 if (html == null) {

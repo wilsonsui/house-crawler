@@ -17,6 +17,7 @@ public enum CrawlerEnum {
     IP3366("ip3366", "http://www.ip3366.net/", Ip66Crawler.class),
     IP89("ip89", "https://www.89ip.cn/", IP89Crawler.class),
     KAI_XIN("kxdaili", "http://www.kxdaili.com/dailiip/", IP89Crawler.class),
+    XIAO_HUAN_IP("xiaohuanip", "https://ip.ihuan.me/address/5Lit5Zu9.html", XiaoHuanCrawler.class),
 
     ;
 
