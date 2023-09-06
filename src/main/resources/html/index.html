@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vue HTTP Request Example</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        #app {
+            margin: 0 auto; /* 居中 */
+        }
+
+        .pagination-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .time-tree ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .time-tree li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+<div id="app">
+    <div>
+        <el-table :data="displayedItems" style="width: 100%" border :cell-style="{border: '1px solid #ddd'}">
+            <el-table-column :resizable="true" label="ID">
+                <template slot-scope="{ row }">
+                    <a @click="showDetailsDialog(row.id)">{{ row.id }}</a>
+                </template>
+            </el-table-column>
+            <el-table-column :resizable="true" label="标题">
+                <template slot-scope="{ row }">
+                    <a @click="showDetailsDialog(row.id)">{{ row.title }}</a>
+                </template>
+            </el-table-column>
+            <el-table-column :resizable="true" label="小区名称" prop="communityName"></el-table-column>
+            <el-table-column :resizable="true" label="所在区域" prop="area1"></el-table-column>
+            <el-table-column :resizable="true" label="所在商圈" prop="area2"></el-table-column>
+            <el-table-column :resizable="true" label="单价" prop="unitPrice"></el-table-column>
+            <el-table-column :resizable="true" label="总价" prop="price"></el-table-column>
+            <el-table-column :resizable="true" label="面积" prop="jzArea"></el-table-column>
+            <el-table-column :resizable="true" label="户型" prop="unitType"></el-table-column>
+            <el-table-column :resizable="true" label="关注人数" prop="follow"></el-table-column>
+            <el-table-column :resizable="true" label="朝向" prop="orientation"></el-table-column>
+            <el-table-column :resizable="true" label="楼层" prop="floor"></el-table-column>
+            <el-table-column :resizable="true" label="装修情况" prop="decorationType"></el-table-column>
+            <el-table-column :resizable="true" label="电梯" prop="elevator"></el-table-column>
+            <el-table-column :resizable="true" label="梯户比例" prop="tihubili"></el-table-column>
+            <el-table-column :resizable="true" label="挂牌时间" prop="listingTime"></el-table-column>
+            <el-table-column :resizable="true" label="最后交易时间" prop="lastTradeTime"></el-table-column>
+            <el-table-column :resizable="true" label="创建时间" prop="createTime"></el-table-column>
+            <el-table-column :resizable="true" label="更新时间" prop="updateTime"></el-table-column>
+        </el-table>
+        <div class="pagination-wrapper">
+            <el-pagination
+                    :current-page="currentPage"
+                    :page-size="itemsPerPage"
+                    :total="total"
+                    layout="prev, pager, next"
+                    @current-change="updateDisplayedItems">
+            </el-pagination>
+        </div>
+    </div>
+    <el-dialog :visible.sync="detailsDialogVisible" title="详情">
+
+        <div class="time-tree">
+            <h3>历史价格变更记录</h3>
+            <ul>
+                <li v-for="item in queryDetailData" :key="item.id">
+                    <span>&nbsp;总价：{{ item.price }}</span>
+                    <span>&nbsp;单价：{{ item.unitPrice }}</span>
+                    <span> &nbsp;&nbsp; </span>
+                    <span>{{ item.date }}</span>
+                </li>
+            </ul>
+        </div>
+        <h3>详情数据</h3>
+        <el-form label-width="120px" v-if="detailsData">
+            <el-form-item label="标题">{{ detailsData.title }}</el-form-item>
+            <el-form-item label="小区名称">{{ detailsData.communityName }}</el-form-item>
+            <el-form-item label="所在区域">{{ detailsData.area1 }}</el-form-item>
+            <el-form-item label="所在商圈">{{ detailsData.area2 }}</el-form-item>
+            <el-form-item label="单价">{{ detailsData.unitPrice }}</el-form-item>
+            <el-form-item label="总价">{{ detailsData.price }}</el-form-item>
+            <el-form-item label="面积">{{ detailsData.jzArea }}</el-form-item>
+            <el-form-item label="户型">{{ detailsData.unitType }}</el-form-item>
+            <el-form-item label="关注人数">{{ detailsData.follow }}</el-form-item>
+            <el-form-item label="朝向">{{ detailsData.orientation }}</el-form-item>
+            <el-form-item label="楼层">{{ detailsData.floor }}</el-form-item>
+            <el-form-item label="装修情况">{{ detailsData.decorationType }}</el-form-item>
+            <el-form-item label="电梯">{{ detailsData.elevator }}</el-form-item>
+            <el-form-item label="梯户比例">{{ detailsData.tihubili }}</el-form-item>
+            <el-form-item label="挂牌时间">{{ detailsData.listingTime }}</el-form-item>
+            <el-form-item label="最后交易时间">{{ detailsData.lastTradeTime }}</el-form-item>
+            <el-form-item label="创建时间">{{ detailsData.createTime }}</el-form-item>
+            <el-form-item label="更新时间">{{ detailsData.updateTime }}</el-form-item>
+        </el-form>
+
+
+    </el-dialog>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello, Vue!',
+            displayedItems: [], // 当前显示的数据
+            itemsPerPage: 10, // 每页显示的数据条数
+            currentPage: 1, // 当前页码
+            totalPages: 0, // 总页数
+            total: 0, // 总数
+            detailsDialogVisible: false, // 详情弹出框的显示状态
+            detailsData: null, // 当前展示的详情数据
+            queryDetailData: null, // 查询的详情数据
+        },
+        created() {
+            this.pageData()
+        },
+        mounted() {
+        },
+        methods: {
+            showDetailsDialog(id) {
+                axios.get(`http://127.0.0.1:8000/detail/${id}`)
+                    .then(response => {
+                        this.queryDetailData = response.data;
+                    });
+                this.detailsData = this.displayedItems.find(item => item.id === id); // 根据ID查找当前行的数据
+                this.detailsDialogVisible = true; // 显示详情弹出框
+            },
+            pageData() {
+                axios.post('http://127.0.0.1:8000/page', {page: this.currentPage})
+                    .then(response => {
+                        console.log(response);
+                        this.displayedItems = response.data.records;
+                        this.totalPages = response.data.pages;
+                        this.total = response.data.total;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            },
+            updateDisplayedItems(val) {
+                this.currentPage = val;
+                this.pageData();
+            }
+        }
+    });
+</script>
+</body>
+
+</html>
