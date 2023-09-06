@@ -3,6 +3,7 @@ package com.wilson.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
 
@@ -37,13 +38,19 @@ public class KeHouse {
     private String url;//详情页url
     private String elevator;//电梯有无
     private String tihubili;//梯户比例
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date listingTime;//挂牌时间
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date lastTradeTime;//上次交易时间
     private String propertyRight;//产权
     private Integer year;//建筑年代
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+
     private Date createTime;//创建时间
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;//更新时间
     private String age;//房屋年限
+    private Integer status; //'0 下架 1 卖出 '
 
 
 }

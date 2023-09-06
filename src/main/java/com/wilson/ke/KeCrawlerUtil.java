@@ -88,27 +88,42 @@ public class KeCrawlerUtil {
     }
 
     public void crawlerAll() {
-        for (String url : allUrlList) {
-            for (Integer i = 1; i <= pageSize; i++) {
-                String newUrl = url.replace("${1}", i.toString());
-                log.error("处理贝壳链接:{}", newUrl);
-                String html = CrawlerUtil.doRequest(newUrl);
-                if (StrUtil.isNotBlank(html)) {
-
-                    List<KeHouse> houseList = parseList(html);
-                    if (CollectionUtil.isEmpty(houseList)) {
-                        //跳出内层循环
-                        break;
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ArrayList<Future<?>> futures = new ArrayList<>();
+        for (List<String> stringList : ListUtil.split(new ArrayList<>(allUrlList), 2)) {
+            Future<?> future = executorService.submit(() -> {
+                for (String url : stringList) {
+                    for (Integer i = 1; i <= pageSize; i++) {
+                        String newUrl = url.replace("${1}", i.toString());
+                        log.error("处理贝壳链接:{}", newUrl);
+                        String html = CrawlerUtil.doRequest(newUrl);
+                        if (StrUtil.isNotBlank(html)) {
+                            List<KeHouse> houseList = parseList(html);
+                            if (CollectionUtil.isEmpty(houseList)) {
+                                //跳出内层循环
+                                break;
+                            }
+                            threadPoolExecutor.execute(() -> {
+                                saveAndUpdateKeHouse(houseList);
+                            });
+                        }
+                        try {
+                            TimeUnit.SECONDS.sleep(3);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                    threadPoolExecutor.execute(() -> {
-                        saveAndUpdateKeHouse(houseList);
-                    });
                 }
-                try {
-                    TimeUnit.SECONDS.sleep(3);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+            });
+            futures.add(future);
+        }
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
             }
         }
         log.error("爬取所有三房列表完毕！");
@@ -200,7 +215,7 @@ public class KeCrawlerUtil {
         for (; ; ) {
             log.error("循环========");
             List<KeHouse> keHouseList = keHouseMapper.selectList(new QueryWrapper<KeHouse>()
-                    .isNull("area1").last("limit 1000"));
+                    .isNull("area1").isNull("status").last("limit 1000"));
             if (CollectionUtil.isEmpty(keHouseList)) {
                 break;
             }
@@ -211,7 +226,15 @@ public class KeCrawlerUtil {
                         log.error("更新房屋数据:{}", keHouse.getUrl());
                         String url = keHouse.getUrl();
                         String html = CrawlerUtil.doRequest(url);
-                        parseDetail(html, keHouse);
+                        if (html.equals("404")) {
+                            //更新house状态
+                            KeHouse update = new KeHouse();
+                            update.setId(keHouse.getId());
+                            update.setStatus(0);
+                            keHouseMapper.updateById(update);
+                        } else {
+                            parseDetail(html, keHouse);
+                        }
                     }
                 });
                 futureList.add(future);
@@ -310,13 +333,13 @@ public class KeCrawlerUtil {
                     keHouseChange.setUpdateTime(new Date());
                     keHouseChangeMapper.insert(keHouseChange);
                 }
-
                 //更新
                 keHouse.setId(selectedOne.getId());
                 keHouse.setUpdateTime(new Date());
+                //如果是更新 原来价格不变
+                keHouse.setPrice(selectedOne.getPrice());
+                keHouse.setUnitPrice(selectedOne.getUnitPrice());
                 keHouseMapper.updateById(keHouse);
-
-
             } else {
                 keHouseMapper.insert(keHouse);
             }

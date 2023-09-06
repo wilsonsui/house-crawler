@@ -37,6 +37,9 @@ public class CrawlerUtil {
         try (Response response = httpClient.newCall(request).execute()) {
             assert response.body() != null;
             if (!response.isSuccessful()) {
+                if (response.code() == 404) {
+                    return "404";
+                }
                 return null;
             }
             resp = response.body().string();
@@ -69,6 +72,9 @@ public class CrawlerUtil {
         try (Response response = httpClient.newCall(request).execute()) {
             assert response.body() != null;
             if (!response.isSuccessful()) {
+                if (response.code() == 404) {
+                    return "404";
+                }
                 return null;
             }
             resp = response.body().string();
