@@ -8,6 +8,7 @@ import com.wilson.config.RandomUserAgentInterceptor;
 import com.wilson.crawler.AbstractCrawler;
 import com.wilson.entity.ProxyEntity;
 import com.wilson.fangtianxia.FTXCrawlerUtil;
+import com.wilson.ke.KeCrawlerUtil;
 import com.wilson.mapper.HouseChangeDetailMapper;
 import com.wilson.mapper.HouseMapper;
 import com.wilson.pojo.House;
@@ -32,6 +33,7 @@ import java.net.Proxy;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +55,24 @@ public class IndexController {
 
     @Autowired
     FTXCrawlerUtil ftxCrawlerUtil;
+    @Autowired
+    KeCrawlerUtil keCrawlerUtil;
+
+    //爬取南通的房子
+    @GetMapping("/keHouse")
+    public String crawlerKeHouse() throws IOException {
+        new Thread(() -> {
+            keCrawlerUtil.crawlerAll();
+        }).start();
+        return "success";
+    }
+
+    //更新每个房子的详情
+    @GetMapping("/updateKeHouse")
+    public String updateKeHouse() throws IOException, ExecutionException, InterruptedException {
+        keCrawlerUtil.updateKeHouseD();
+        return "success";
+    }
 
     @GetMapping("/crawlIP")
     public void crawlTask() {

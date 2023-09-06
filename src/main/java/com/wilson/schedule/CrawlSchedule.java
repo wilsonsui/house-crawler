@@ -48,10 +48,10 @@ public class CrawlSchedule {
     @Autowired
     List<AbstractCrawler> abstractCrawlerList;
 
-    @Scheduled(cron = "0/60 * * * * ?")
-    @Async("myExecutor")
+    //    @Scheduled(cron = "0/60 * * * * ?")
+//    @Async("myExecutor")
     public void verify() {
-        log.error("校验IP是否可用:开始");
+        //log.error("校验IP是否可用:开始");
         VerifyQueue verifyQueue = new VerifyQueue();
         //取出redis中所有的key
         Set<String> keys = stringRedisTemplate.keys("*");
