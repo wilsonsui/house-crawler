@@ -15,9 +15,9 @@ import java.util.Date;
  * @author wilson
  */
 @Data
-@TableName("ke_house")
+@TableName("nt_ke_house")
 @ToString
-public class KeHouse {
+public class NtKeHouse {
     //id ,houseId,标题,小区名称,区域1，区域2，单价，总价，建筑面积，户型，朝向，楼层，装修类型
     //电梯有无，梯户比例，挂牌时间，上次交易时间，产权
     @TableId(type = IdType.AUTO)

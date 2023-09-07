@@ -11,9 +11,9 @@ import java.util.Date;
 /**
  * @author wilson
  */
-@TableName("ke_house_change")
+@TableName("nt_ke_house_change")
 @Data
-public class KeHouseChange {
+public class NtKeHouseChange {
     //id houseId，单价 总价 更新时间
     @TableId(type = IdType.AUTO)
     private Integer id;

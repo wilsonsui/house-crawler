@@ -1,13 +1,48 @@
 package com.wilson;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.excel.EasyExcel;
+import com.wilson.entity.NtKeHouse;
+import com.wilson.entity.KeHouseExcel;
+import com.wilson.mapper.NtKeHouseMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//@SpringBootTest
+@SpringBootTest
 class FreeProxyCrawlerApplicationTests {
+    @Autowired
+    NtKeHouseMapper keHouseMapper;
+
+    @Test
+    public void 导出数据() {
+        List<NtKeHouse> keHouseList = keHouseMapper.selectList(null);
+        ArrayList<KeHouseExcel> keHouseExcels = new ArrayList<>();
+        for (NtKeHouse keHouse : keHouseList) {
+            KeHouseExcel keHouseExcel = new KeHouseExcel();
+            BeanUtils.copyProperties(keHouse, keHouseExcel);
+            if (ObjectUtil.equal(keHouse.getStatus(), 0)) {
+                keHouseExcel.setStatusStr("下架");
+            } else {
+                keHouseExcel.setStatusStr("正常");
+            }
+            keHouseExcel.setCreateTimeStr(DateUtil.format(keHouse.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+            keHouseExcel.setLastTradeTimeStr(DateUtil.format(keHouse.getLastTradeTime(), "yyyy-MM-dd"));
+            keHouseExcel.setListingTimeStr(DateUtil.format(keHouse.getListingTime(), "yyyy-MM-dd"));
+            keHouseExcels.add(keHouseExcel);
+        }
+        EasyExcel.write("南通二手房三室_" + DateUtil.format(new Date(), "yyyy-MM-dd") + ".xlsx", KeHouseExcel.class)
+                .sheet("sheet1").doWrite(keHouseExcels);
+
+    }
 
     @Test
     void contextLoads() {

@@ -6,10 +6,10 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.wilson.entity.KeHouse;
-import com.wilson.entity.KeHouseChange;
-import com.wilson.mapper.KeHouseChangeMapper;
-import com.wilson.mapper.KeHouseMapper;
+import com.wilson.entity.NtKeHouse;
+import com.wilson.entity.NtKeHouseChange;
+import com.wilson.mapper.NtKeHouseChangeMapper;
+import com.wilson.mapper.NtKeHouseMapper;
 import com.wilson.util.CrawlerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -19,8 +19,6 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -29,15 +27,15 @@ import java.util.concurrent.*;
  */
 @Slf4j
 @Component
-public class KeCrawlerUtil {
+public class NtKeCrawlerUtil {
     @Autowired
     Executor threadPoolExecutor;
 
     @Autowired
-    KeHouseMapper keHouseMapper;
+    NtKeHouseMapper keHouseMapper;
 
     @Autowired
-    KeHouseChangeMapper keHouseChangeMapper;
+    NtKeHouseChangeMapper keHouseChangeMapper;
 
     //南通二手房
 
@@ -74,6 +72,9 @@ public class KeCrawlerUtil {
         allUrlList.add("https://nt.ke.com/ershoufang/xingren/pg${1}l3");
         allUrlList.add("https://nt.ke.com/ershoufang/xiting/pg${1}l3");
         allUrlList.add("https://nt.ke.com/ershoufang/zhangzhishan/pg${1}l3");
+        allUrlList.add("https://nt.ke.com/ershoufang/chongchuanqu/pg${1}l4/");
+        allUrlList.add("https://nt.ke.com/ershoufang/nantongjingjijishukaifaqu/pg${1}l4/");
+
     }
 
 
@@ -98,7 +99,7 @@ public class KeCrawlerUtil {
                         log.error("处理贝壳链接:{}", newUrl);
                         String html = CrawlerUtil.doRequest(newUrl);
                         if (StrUtil.isNotBlank(html)) {
-                            List<KeHouse> houseList = parseList(html);
+                            List<NtKeHouse> houseList = parseList(html);
                             if (CollectionUtil.isEmpty(houseList)) {
                                 //跳出内层循环
                                 break;
@@ -134,7 +135,7 @@ public class KeCrawlerUtil {
         for (String url : urlList) {
             log.error("处理贝壳链接:{}", url);
             String html = CrawlerUtil.doRequest(url);
-            List<KeHouse> houseList = parseList(html);
+            List<NtKeHouse> houseList = parseList(html);
             if (CollectionUtil.isEmpty(houseList)) {
                 break;
             }
@@ -156,12 +157,12 @@ public class KeCrawlerUtil {
      * @param html
      * @return
      */
-    public List<KeHouse> parseList(String html) {
-        List<KeHouse> keHouseList = new ArrayList<>();
+    public List<NtKeHouse> parseList(String html) {
+        List<NtKeHouse> keHouseList = new ArrayList<>();
         Document document = Jsoup.parse(html);
         Elements elements = document.select("ul[class=sellListContent]").select("li[class=clear]");
         for (Element element : elements) {
-            KeHouse keHouse = new KeHouse();
+            NtKeHouse keHouse = new NtKeHouse();
             String title = element.select("div[class=title]").select("a").text();
             keHouse.setTitle(title);
             String href = element.select("div[class=title]").select("a").attr("href");
@@ -190,7 +191,7 @@ public class KeCrawlerUtil {
     public void updateKeHouseArea1() {
         //每次取出一个
         for (; ; ) {
-            KeHouse keHouse = keHouseMapper.selectOne(new QueryWrapper<KeHouse>()
+            NtKeHouse keHouse = keHouseMapper.selectOne(new QueryWrapper<NtKeHouse>()
                     .isNull("area1").last("limit 1"));
             if (keHouse != null) {
                 log.error("更新房屋数据:{}", keHouse.getUrl());
@@ -214,7 +215,7 @@ public class KeCrawlerUtil {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (; ; ) {
             log.error("循环========");
-            List<KeHouse> keHouseList = keHouseMapper.selectList(new QueryWrapper<KeHouse>()
+            List<NtKeHouse> keHouseList = keHouseMapper.selectList(new QueryWrapper<NtKeHouse>()
                     .isNull("area1").isNull("status").last("limit 1000"));
             if (CollectionUtil.isEmpty(keHouseList)) {
                 break;
@@ -222,13 +223,13 @@ public class KeCrawlerUtil {
             List<Future<?>> futureList = new ArrayList<>();
             ListUtil.split(keHouseList, 100).forEach(keHouses -> {
                 Future<?> future = executorService.submit(() -> {
-                    for (KeHouse keHouse : keHouses) {
+                    for (NtKeHouse keHouse : keHouses) {
                         log.error("更新房屋数据:{}", keHouse.getUrl());
                         String url = keHouse.getUrl();
                         String html = CrawlerUtil.doRequest(url);
                         if (html.equals("404")) {
                             //更新house状态
-                            KeHouse update = new KeHouse();
+                            NtKeHouse update = new NtKeHouse();
                             update.setId(keHouse.getId());
                             update.setStatus(0);
                             keHouseMapper.updateById(update);
@@ -262,11 +263,11 @@ public class KeCrawlerUtil {
      * @param htmlDetail
      * @return
      */
-    public void parseDetail(String htmlDetail, KeHouse keHouse) {
+    public void parseDetail(String htmlDetail, NtKeHouse keHouse) {
         if (htmlDetail == null) {
             return;
         }
-        KeHouse updateKeHouse = new KeHouse();
+        NtKeHouse updateKeHouse = new NtKeHouse();
         updateKeHouse.setId(keHouse.getId());
         updateKeHouse.setUpdateTime(new Date());
         Document document = Jsoup.parse(htmlDetail);
@@ -316,17 +317,17 @@ public class KeCrawlerUtil {
         updateById(updateKeHouse);
     }
 
-    public void updateById(KeHouse keHouse) {
+    public void updateById(NtKeHouse keHouse) {
         keHouseMapper.updateById(keHouse);
     }
 
-    public void saveAndUpdateKeHouse(List<KeHouse> keHouseList) {
-        for (KeHouse keHouse : keHouseList) {
-            KeHouse selectedOne = keHouseMapper.selectOne(new QueryWrapper<KeHouse>()
+    public void saveAndUpdateKeHouse(List<NtKeHouse> keHouseList) {
+        for (NtKeHouse keHouse : keHouseList) {
+            NtKeHouse selectedOne = keHouseMapper.selectOne(new QueryWrapper<NtKeHouse>()
                     .eq("url", keHouse.getUrl()));
             if (selectedOne != null) {
                 if (ObjectUtil.notEqual(selectedOne.getPrice(), keHouse.getPrice())) {
-                    KeHouseChange keHouseChange = new KeHouseChange();
+                    NtKeHouseChange keHouseChange = new NtKeHouseChange();
                     keHouseChange.setHouseId(selectedOne.getId());
                     keHouseChange.setUnitPrice(keHouse.getUnitPrice());
                     keHouseChange.setPrice(keHouse.getPrice());
