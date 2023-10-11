@@ -5,7 +5,9 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.excel.EasyExcel;
 import com.wilson.entity.NtKeHouse;
 import com.wilson.entity.KeHouseExcel;
+import com.wilson.entity.WxKeHouse;
 import com.wilson.mapper.NtKeHouseMapper;
+import com.wilson.mapper.WxKeHouseMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,14 @@ import java.util.regex.Pattern;
 @SpringBootTest
 class FreeProxyCrawlerApplicationTests {
     @Autowired
-    NtKeHouseMapper keHouseMapper;
+    WxKeHouseMapper keHouseMapper;
+    @Autowired
+    NtKeHouseMapper ntKeHouseMapper;
+
 
     @Test
-    public void 导出数据() {
-        List<NtKeHouse> keHouseList = keHouseMapper.selectList(null);
+    public void 导出NT数据() {
+        List<NtKeHouse> keHouseList = ntKeHouseMapper.selectList(null);
         ArrayList<KeHouseExcel> keHouseExcels = new ArrayList<>();
         for (NtKeHouse keHouse : keHouseList) {
             KeHouseExcel keHouseExcel = new KeHouseExcel();
@@ -39,7 +44,29 @@ class FreeProxyCrawlerApplicationTests {
             keHouseExcel.setListingTimeStr(DateUtil.format(keHouse.getListingTime(), "yyyy-MM-dd"));
             keHouseExcels.add(keHouseExcel);
         }
-        EasyExcel.write("南通二手房三室_" + DateUtil.format(new Date(), "yyyy-MM-dd") + ".xlsx", KeHouseExcel.class)
+        EasyExcel.write("南通二手房_" + DateUtil.format(new Date(), "yyyy-MM-dd") + ".xlsx", KeHouseExcel.class)
+                .sheet("sheet1").doWrite(keHouseExcels);
+
+    }
+
+    @Test
+    public void 导出数据() {
+        List<WxKeHouse> keHouseList = keHouseMapper.selectList(null);
+        ArrayList<KeHouseExcel> keHouseExcels = new ArrayList<>();
+        for (WxKeHouse keHouse : keHouseList) {
+            KeHouseExcel keHouseExcel = new KeHouseExcel();
+            BeanUtils.copyProperties(keHouse, keHouseExcel);
+            if (ObjectUtil.equal(keHouse.getStatus(), 0)) {
+                keHouseExcel.setStatusStr("下架");
+            } else {
+                keHouseExcel.setStatusStr("正常");
+            }
+            keHouseExcel.setCreateTimeStr(DateUtil.format(keHouse.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+            keHouseExcel.setLastTradeTimeStr(DateUtil.format(keHouse.getLastTradeTime(), "yyyy-MM-dd"));
+            keHouseExcel.setListingTimeStr(DateUtil.format(keHouse.getListingTime(), "yyyy-MM-dd"));
+            keHouseExcels.add(keHouseExcel);
+        }
+        EasyExcel.write("wx二手房_" + DateUtil.format(new Date(), "yyyy-MM-dd") + ".xlsx", KeHouseExcel.class)
                 .sheet("sheet1").doWrite(keHouseExcels);
 
     }

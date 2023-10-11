@@ -52,5 +52,8 @@ public class NtKeHouse {
     private String age;//房屋年限
     private Integer status; //'0 下架 1 卖出 '
 
+    private Double changeUnitPrice;//价格变化
+    private Double changePrice;//价格变化
+
 
 }

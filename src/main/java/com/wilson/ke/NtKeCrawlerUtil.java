@@ -19,6 +19,8 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.sound.midi.Soundbank;
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -39,41 +41,35 @@ public class NtKeCrawlerUtil {
 
     //南通二手房
 
-    private static String baseUrl = "https://nt.ke.com/ershoufang/binjiang3/pg${1}l3/";
+    private static String baseUrl = "https://nt.ke.com/ershoufang";
 
     private static Set<String> allUrlList = new LinkedHashSet<>();
 
     static {
-        allUrlList.add("https://nt.ke.com/ershoufang/hongqiao2/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/junshan/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/langshan/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/xincheng1/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/binjiang3/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/linjiang/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/sutong/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/haohe/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/rengang/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/tangzha/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/yongxing/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/chengdong4/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/chenqiao/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/chuanjiang/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/guanyinshan1/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/liuqiao/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/pingchao/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/qinzao/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/sanyu/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/shigang/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/shizong2/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/wujie/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/xianfeng/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/xingdong1/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/xingfu1/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/xingren/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/xiting/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/zhangzhishan/pg${1}l3");
-        allUrlList.add("https://nt.ke.com/ershoufang/chongchuanqu/pg${1}l4/");
-        allUrlList.add("https://nt.ke.com/ershoufang/nantongjingjijishukaifaqu/pg${1}l4/");
+        //https://nt.ke.com/ershoufang/nantongjingjijishukaifaqu/l3l4p2p3/
+        //https://nt.ke.com/ershoufang/gangzhaqu/l3l4p2p3/
+        //https://nt.ke.com/ershoufang/suxitongyuanqu/l3l4p2p3/
+
+        //四大区 近地铁， 34室 100-150w
+        allUrlList.add("https://nt.ke.com/ershoufang/nantongjingjijishukaifaqu/pg${1}sf1su1l3l4l5p2p3/");
+        allUrlList.add("https://nt.ke.com/ershoufang/gangzhaqu/pg${1}sf1su1l3l4l5p2p3/");
+        allUrlList.add("https://nt.ke.com/ershoufang/suxitongyuanqu/pg${1}sf1su1l3l4l5p2p3/");
+        allUrlList.add("https://nt.ke.com/ershoufang/chongchuanqu/pg${1}sf1su1l3l4l5p2p3/");
+        allUrlList.add("https://nt.ke.com/ershoufang/tongzhouqu/pg${1}sf1su1l3l4l5p2p3/");
+
+//        allUrlList.add("https://nt.ke.com/ershoufang/hongqiao2/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/junshan/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/langshan/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/xincheng1/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/haohe/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/rengang/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/tangzha/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/yongxing/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/chengdong4/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/chenqiao/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/guanyinshan1/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/qinzao/pg${1}l3");
+//        allUrlList.add("https://nt.ke.com/ershoufang/xingfu1/pg${1}l3");
 
     }
 
@@ -89,7 +85,7 @@ public class NtKeCrawlerUtil {
     }
 
     public void crawlerAll() {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
         ArrayList<Future<?>> futures = new ArrayList<>();
         for (List<String> stringList : ListUtil.split(new ArrayList<>(allUrlList), 2)) {
             Future<?> future = executorService.submit(() -> {
@@ -104,15 +100,14 @@ public class NtKeCrawlerUtil {
                                 //跳出内层循环
                                 break;
                             }
-                            threadPoolExecutor.execute(() -> {
-                                saveAndUpdateKeHouse(houseList);
-                            });
+                            saveAndUpdateKeHouse(houseList);
                         }
                         try {
-                            TimeUnit.SECONDS.sleep(3);
+                            TimeUnit.SECONDS.sleep(10);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
+
                     }
                 }
             });
@@ -212,16 +207,17 @@ public class NtKeCrawlerUtil {
     }
 
     public void updateKeHouseD() throws ExecutionException, InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
         for (; ; ) {
             log.error("循环========");
             List<NtKeHouse> keHouseList = keHouseMapper.selectList(new QueryWrapper<NtKeHouse>()
-                    .isNull("area1").isNull("status").last("limit 1000"));
+                    .isNull("area1").isNull("status")
+                    .last("limit 10"));
             if (CollectionUtil.isEmpty(keHouseList)) {
                 break;
             }
             List<Future<?>> futureList = new ArrayList<>();
-            ListUtil.split(keHouseList, 100).forEach(keHouses -> {
+            ListUtil.split(keHouseList, 5).forEach(keHouses -> {
                 Future<?> future = executorService.submit(() -> {
                     for (NtKeHouse keHouse : keHouses) {
                         log.error("更新房屋数据:{}", keHouse.getUrl());
@@ -317,6 +313,38 @@ public class NtKeCrawlerUtil {
         updateById(updateKeHouse);
     }
 
+    public static void main(String[] args) {
+        String path = "/Users/suishunli/Documents/《神烦警探》1-8季 强烈推荐! 喜剧_犯罪 (2013-2021)";
+        //遍历文件夹下的所有文件夹及文件 获取名字
+        File file = new File(path);
+        File[] files = file.listFiles();
+        for (File file1 : files) {
+            if (file1.isDirectory()) {
+                for (File listFile : file1.listFiles()) {
+                    if (listFile.isFile()) {
+                        //获取文件后缀
+                        String name = listFile.getName();
+                        String suffix = name.substring(name.lastIndexOf(".") + 1);
+                        if (Arrays.asList("mp4", "mkv").contains(suffix)) {
+                            System.out.println(listFile.getName());
+                            String oldFileName = listFile.getName();
+//                            神烦警探.S05E16..mp4
+//                            神烦警探.S01E01.HR-HDTV.1024x576.中英双语-电波字幕组V2更多资源-XH1080.com.mkv
+                            String newName = oldFileName.replace("Brooklyn.Nine.Nine.", "").replace("HR-HDTV.1024x576.中英双语-电波字幕组更多资源-XH1080.com", "");
+                            listFile.renameTo(new File(listFile.getParent() + "/" + newName));
+                        }
+                    }
+
+                }
+
+
+            }
+
+
+        }
+
+    }
+
     public void updateById(NtKeHouse keHouse) {
         keHouseMapper.updateById(keHouse);
     }
@@ -337,9 +365,15 @@ public class NtKeCrawlerUtil {
                 //更新
                 keHouse.setId(selectedOne.getId());
                 keHouse.setUpdateTime(new Date());
-                //如果是更新 原来价格不变
-                keHouse.setPrice(selectedOne.getPrice());
-                keHouse.setUnitPrice(selectedOne.getUnitPrice());
+                if (!Objects.equals(selectedOne.getPrice(), keHouse.getPrice())) {
+                    log.error("价格发生变化，进行更新");
+                    keHouse.setChangePrice(keHouse.getPrice());//最新的价格
+                    keHouse.setChangeUnitPrice(keHouse.getUnitPrice());//最新抓取到的价格
+                }
+                //再次设置原来价格
+                keHouse.setPrice(selectedOne.getPrice());//
+                keHouse.setUnitPrice(selectedOne.getUnitPrice());//
+                keHouse.setCreateTime(selectedOne.getCreateTime());
                 keHouseMapper.updateById(keHouse);
             } else {
                 keHouseMapper.insert(keHouse);

@@ -47,63 +47,63 @@ public class WxKeCrawlerUtil {
     private static Set<String> allUrlList = new LinkedHashSet<>();
 
     static {
-        allUrlList.add("https://wx.ke.com/ershoufang/changguangxidaxuecheng/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/haianchengshiminzhongxin/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/heliekou/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/huazhuang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/hudai/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/lihuxincheng/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/mashan/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/meiyuan/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/nanquan1/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/rongchuangwenhualvyoucheng/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/rongxiang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/taihushanshuicheng/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/xintiyuzhongxin/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/beidajie/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/guangruiguangfeng/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/hubinshangyejie/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/minfengzhuangqian/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/qingmingqiao/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/sanyangguangchang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/wanxiangchengdongjiang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/wuaiguangchang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/yangming/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/yinglongqiao/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/zhongqiao/pg${1}l3l4");
+        allUrlList.add("https://wx.ke.com/ershoufang/changguangxidaxuecheng/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/haianchengshiminzhongxin/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/heliekou/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/huazhuang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/hudai/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/lihuxincheng/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/mashan/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/meiyuan/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/nanquan1/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/rongchuangwenhualvyoucheng/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/rongxiang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/taihushanshuicheng/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/xintiyuzhongxin/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/beidajie/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/guangruiguangfeng/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/hubinshangyejie/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/minfengzhuangqian/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/qingmingqiao/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/sanyangguangchang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/wanxiangchengdongjiang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/wuaiguangchang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/yangming/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/yinglongqiao/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/zhongqiao/pg${1}l3");
 
-        allUrlList.add("https://wx.ke.com/ershoufang/hongshan4/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/jiangxi/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/meicun/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/shengtaiyuan/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/shuofang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/tangnan/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/tangtieqiao/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/wangzhuang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/xinan2/pg${1}l3l4");
+        allUrlList.add("https://wx.ke.com/ershoufang/hongshan4/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/jiangxi/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/meicun/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/shengtaiyuan/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/shuofang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/tangnan/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/tangtieqiao/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/wangzhuang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/xinan2/pg${1}l3");
 
-        allUrlList.add("https://wx.ke.com/ershoufang/huangxiang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/liutan/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/luoshe/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/qianqiao/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/qianzhou/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/shanbei/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/shitangwan/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/xizhang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/yangshan/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/yanqiao/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/yuqi/pg${1}l3l4");
+        allUrlList.add("https://wx.ke.com/ershoufang/huangxiang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/liutan/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/luoshe/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/qianqiao/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/qianzhou/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/shanbei/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/shitangwan/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/xizhang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/yangshan/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/yanqiao/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/yuqi/pg${1}l3");
 
-        allUrlList.add("https://wx.ke.com/ershoufang/anzhen/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/dongbeitang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/donggang/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/dongting/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/ehu/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/fangqian/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/guangyi/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/shangmadun/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/xibei/pg${1}l3l4");
-        allUrlList.add("https://wx.ke.com/ershoufang/yangjian/pg${1}l3l4");
+        allUrlList.add("https://wx.ke.com/ershoufang/anzhen/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/dongbeitang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/donggang/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/dongting/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/ehu/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/fangqian/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/guangyi/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/shangmadun/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/xibei/pg${1}l3");
+        allUrlList.add("https://wx.ke.com/ershoufang/yangjian/pg${1}l3");
 
     }
 
@@ -352,28 +352,28 @@ public class WxKeCrawlerUtil {
     public static void main(String[] args) {
         String html = "<div>\n" +
                 "                                  <b>A</b>\n" +
-                "                                      <a href=\"/ershoufang/anzhen/l3l4\">安镇</a>\n" +
+                "                                      <a href=\"/ershoufang/anzhen/l3\">安镇</a>\n" +
                 "                                                    <b>D</b>\n" +
-                "                                      <a href=\"/ershoufang/dongbeitang/l3l4\">东北塘</a>\n" +
-                "                                      <a href=\"/ershoufang/donggang/l3l4\">东港</a>\n" +
-                "                                      <a href=\"/ershoufang/dongting/l3l4\">东亭</a>\n" +
+                "                                      <a href=\"/ershoufang/dongbeitang/l3\">东北塘</a>\n" +
+                "                                      <a href=\"/ershoufang/donggang/l3\">东港</a>\n" +
+                "                                      <a href=\"/ershoufang/dongting/l3\">东亭</a>\n" +
                 "                                                    <b>E</b>\n" +
-                "                                      <a href=\"/ershoufang/ehu/l3l4\">鹅湖</a>\n" +
+                "                                      <a href=\"/ershoufang/ehu/l3\">鹅湖</a>\n" +
                 "                                                    <b>F</b>\n" +
-                "                                      <a href=\"/ershoufang/fangqian/l3l4\">坊前</a>\n" +
+                "                                      <a href=\"/ershoufang/fangqian/l3\">坊前</a>\n" +
                 "                                                    <b>G</b>\n" +
-                "                                      <a href=\"/ershoufang/guangyi/l3l4\">广益</a>\n" +
+                "                                      <a href=\"/ershoufang/guangyi/l3\">广益</a>\n" +
                 "                                                    <b>S</b>\n" +
-                "                                      <a href=\"/ershoufang/shangmadun/l3l4\">上马墩</a>\n" +
+                "                                      <a href=\"/ershoufang/shangmadun/l3\">上马墩</a>\n" +
                 "                                                    <b>X</b>\n" +
-                "                                      <a href=\"/ershoufang/xibei/l3l4\">锡北</a>\n" +
+                "                                      <a href=\"/ershoufang/xibei/l3\">锡北</a>\n" +
                 "                                                    <b>Y</b>\n" +
-                "                                      <a href=\"/ershoufang/yangjian/l3l4\">羊尖</a>\n" +
+                "                                      <a href=\"/ershoufang/yangjian/l3\">羊尖</a>\n" +
                 "                                                </div>";
 
         Jsoup.parse(html).select("div").select("a").forEach(element -> {
 //            allUrlList.add("https://nt.ke.com/ershoufang/hongqiao2/pg${1}l3");
-            System.out.println("allUrlList.add(\"https://nt.ke.com" + element.attr("href").replace("l3l4", "pg${1}l3l4") + "\");");
+            System.out.println("allUrlList.add(\"https://nt.ke.com" + element.attr("href").replace("l3", "pg${1}l3") + "\");");
         });
     }
 }

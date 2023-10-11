@@ -54,14 +54,14 @@ public class NtKeController {
 
 
     //爬取南通的房子
-    @GetMapping("/ntlist")
+    @GetMapping("/nt1")
     public String crawlerKeHouse() throws IOException {
         keCrawlerUtil.crawlerAll();
         return "success";
     }
 
     //更新每个房子的详情
-    @GetMapping("/ntUpdate")
+    @GetMapping("/nt2")
     public String updateKeHouse() throws IOException, ExecutionException, InterruptedException {
         keCrawlerUtil.updateKeHouseD();
         return "success";

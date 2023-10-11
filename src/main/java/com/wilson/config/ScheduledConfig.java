@@ -27,6 +27,8 @@ public class ScheduledConfig {
         threadPoolExecutor.setDaemon(false);
         threadPoolExecutor.setKeepAliveSeconds(300);// 线程空闲时间
         threadPoolExecutor.setThreadNamePrefix("test-Executor-"); // 线程名字前缀
+        threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy()); // 拒绝策略
+        threadPoolExecutor.initialize();
         return threadPoolExecutor;
     }
 
