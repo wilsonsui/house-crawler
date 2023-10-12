@@ -366,7 +366,6 @@ public class NtKeCrawlerUtil {
                 keHouse.setId(selectedOne.getId());
                 keHouse.setUpdateTime(new Date());
                 if (!Objects.equals(selectedOne.getPrice(), keHouse.getPrice())) {
-                    log.error("价格发生变化，进行更新");
                     keHouse.setChangePrice(keHouse.getPrice());//最新的价格
                     keHouse.setChangeUnitPrice(keHouse.getUnitPrice());//最新抓取到的价格
                 }
