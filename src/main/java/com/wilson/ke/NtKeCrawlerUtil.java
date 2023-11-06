@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sound.midi.Soundbank;
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -51,11 +52,11 @@ public class NtKeCrawlerUtil {
         //https://nt.ke.com/ershoufang/suxitongyuanqu/l3l4p2p3/
 
         //四大区 近地铁， 34室 100-150w
-        allUrlList.add("https://nt.ke.com/ershoufang/nantongjingjijishukaifaqu/pg${1}sf1su1l3l4l5p2p3/");
-        allUrlList.add("https://nt.ke.com/ershoufang/gangzhaqu/pg${1}sf1su1l3l4l5p2p3/");
-        allUrlList.add("https://nt.ke.com/ershoufang/suxitongyuanqu/pg${1}sf1su1l3l4l5p2p3/");
-        allUrlList.add("https://nt.ke.com/ershoufang/chongchuanqu/pg${1}sf1su1l3l4l5p2p3/");
-        allUrlList.add("https://nt.ke.com/ershoufang/tongzhouqu/pg${1}sf1su1l3l4l5p2p3/");
+        allUrlList.add("https://nt.ke.com/ershoufang/nantongjingjijishukaifaqu/pg${1}sf1su1l3l4p2p3p4a4a5a6a7a8/");
+        allUrlList.add("https://nt.ke.com/ershoufang/gangzhaqu/pg${1}sf1su1l3l4p2p3p4a4a5a6a7a8/");
+//        allUrlList.add("https://nt.ke.com/ershoufang/suxitongyuanqu/pg${1}sf1su1l3l4l5p2p3a4a5a6/");
+        allUrlList.add("https://nt.ke.com/ershoufang/chongchuanqu/pg${1}sf1su1l3l4p2p3p4a4a5a6a7a8/");
+        allUrlList.add("https://nt.ke.com/ershoufang/tongzhouqu/pg${1}sf1su1l3l4p2p3p4a4a5a6a7a8/");
 
 //        allUrlList.add("https://nt.ke.com/ershoufang/hongqiao2/pg${1}l3");
 //        allUrlList.add("https://nt.ke.com/ershoufang/junshan/pg${1}l3");
@@ -92,7 +93,7 @@ public class NtKeCrawlerUtil {
                 for (String url : stringList) {
                     for (Integer i = 1; i <= pageSize; i++) {
                         String newUrl = url.replace("${1}", i.toString());
-                        log.error("处理贝壳链接:{}", newUrl);
+//                        log.error("处理贝壳链接:{}", newUrl);
                         String html = CrawlerUtil.doRequest(newUrl);
                         if (StrUtil.isNotBlank(html)) {
                             List<NtKeHouse> houseList = parseList(html);
@@ -103,7 +104,7 @@ public class NtKeCrawlerUtil {
                             saveAndUpdateKeHouse(houseList);
                         }
                         try {
-                            TimeUnit.SECONDS.sleep(10);
+                            TimeUnit.SECONDS.sleep(3);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -168,13 +169,16 @@ public class NtKeCrawlerUtil {
                 if (s.contains("年建")) {
                     keHouse.setYear(Integer.parseInt(s.trim().replace("年建", "")));
                 }
+                if (s.contains("平米")) {
+                    keHouse.setJzArea(Double.parseDouble(s.trim().replace("平米", "")));
+                }
             }
             String positionInfo = element.select("div[class=positionInfo]").text();
             keHouse.setCommunityName(positionInfo.trim());
             String totalPrice = element.select("div[class=totalPrice totalPrice2]").select("span").text();
-            keHouse.setPrice(Double.parseDouble(totalPrice.trim()));
+            keHouse.setPrice(BigDecimal.valueOf(Double.parseDouble(totalPrice.trim())));
             String unitPrice = element.select("div[class=unitPrice]").select("span").text();
-            keHouse.setUnitPrice(Double.parseDouble(unitPrice.replace("元/平", "").replace(",", "")));
+            keHouse.setUnitPrice(BigDecimal.valueOf(Double.parseDouble(unitPrice.replace("元/平", "").replace(",", ""))));
             String followInfo = element.select("div[class=followInfo]").text().split("\\/")[0].trim();
             keHouse.setFollow(Integer.parseInt(followInfo.replace("人关注", "")));
             keHouse.setCreateTime(new Date());
@@ -207,17 +211,17 @@ public class NtKeCrawlerUtil {
     }
 
     public void updateKeHouseD() throws ExecutionException, InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (; ; ) {
             log.error("循环========");
             List<NtKeHouse> keHouseList = keHouseMapper.selectList(new QueryWrapper<NtKeHouse>()
                     .isNull("area1").isNull("status")
-                    .last("limit 10"));
+            );
             if (CollectionUtil.isEmpty(keHouseList)) {
                 break;
             }
             List<Future<?>> futureList = new ArrayList<>();
-            ListUtil.split(keHouseList, 5).forEach(keHouses -> {
+            ListUtil.split(keHouseList, 10).forEach(keHouses -> {
                 Future<?> future = executorService.submit(() -> {
                     for (NtKeHouse keHouse : keHouses) {
                         log.error("更新房屋数据:{}", keHouse.getUrl());
@@ -232,6 +236,22 @@ public class NtKeCrawlerUtil {
                         } else {
                             parseDetail(html, keHouse);
                         }
+                        //生成10之内的随机数
+                        Random random = new Random();
+                        int i = random.nextInt(20);
+                        try {
+                            TimeUnit.SECONDS.sleep(i);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    //生成10之内的随机数
+                    Random random = new Random();
+                    int i = random.nextInt(10);
+                    try {
+                        TimeUnit.SECONDS.sleep(i);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
                 });
                 futureList.add(future);
@@ -239,14 +259,7 @@ public class NtKeCrawlerUtil {
             for (Future<?> future : futureList) {
                 future.get();
             }
-            //生成10之内的随机数
-            Random random = new Random();
-            int i = random.nextInt(10);
-            try {
-                TimeUnit.SECONDS.sleep(i);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+
         }
         executorService.shutdown();
         log.error("更新房屋详情数据结束");
@@ -313,38 +326,6 @@ public class NtKeCrawlerUtil {
         updateById(updateKeHouse);
     }
 
-    public static void main(String[] args) {
-        String path = "/Users/suishunli/Documents/《神烦警探》1-8季 强烈推荐! 喜剧_犯罪 (2013-2021)";
-        //遍历文件夹下的所有文件夹及文件 获取名字
-        File file = new File(path);
-        File[] files = file.listFiles();
-        for (File file1 : files) {
-            if (file1.isDirectory()) {
-                for (File listFile : file1.listFiles()) {
-                    if (listFile.isFile()) {
-                        //获取文件后缀
-                        String name = listFile.getName();
-                        String suffix = name.substring(name.lastIndexOf(".") + 1);
-                        if (Arrays.asList("mp4", "mkv").contains(suffix)) {
-                            System.out.println(listFile.getName());
-                            String oldFileName = listFile.getName();
-//                            神烦警探.S05E16..mp4
-//                            神烦警探.S01E01.HR-HDTV.1024x576.中英双语-电波字幕组V2更多资源-XH1080.com.mkv
-                            String newName = oldFileName.replace("Brooklyn.Nine.Nine.", "").replace("HR-HDTV.1024x576.中英双语-电波字幕组更多资源-XH1080.com", "");
-                            listFile.renameTo(new File(listFile.getParent() + "/" + newName));
-                        }
-                    }
-
-                }
-
-
-            }
-
-
-        }
-
-    }
-
     public void updateById(NtKeHouse keHouse) {
         keHouseMapper.updateById(keHouse);
     }
@@ -379,5 +360,8 @@ public class NtKeCrawlerUtil {
             }
 
         }
+
+
     }
+
 }

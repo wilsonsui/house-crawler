@@ -18,6 +18,7 @@ import com.wilson.util.CrawlerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -53,6 +54,24 @@ public class NtKeController {
     NtKeHouseChangeMapper keHouseChangeMapper;
 
 
+    //定时任务没一个小时执行一次
+    //定时任务没一秒执行一次
+    @Scheduled(cron = "0 0/20 * * * ?")
+    public String renwu() throws IOException, ExecutionException, InterruptedException {
+        log.error("定时任务抓数据");
+        keCrawlerUtil.crawlerAll();
+//        keCrawlerUtil.updateKeHouseD();
+        return "success";
+    }
+
+
+    @Scheduled(cron = "0 0/30 * * * ?")
+    public String renwu2() throws IOException, ExecutionException, InterruptedException {
+        log.error("定时任务更新数据");
+        keCrawlerUtil.updateKeHouseD();
+        return "success";
+    }
+
     //爬取南通的房子
     @GetMapping("/nt1")
     public String crawlerKeHouse() throws IOException {
@@ -65,6 +84,11 @@ public class NtKeController {
     public String updateKeHouse() throws IOException, ExecutionException, InterruptedException {
         keCrawlerUtil.updateKeHouseD();
         return "success";
+    }
+
+    public static void main(String[] args) {
+        String html = CrawlerUtil.doRequest("https://nt.ke.com/ershoufang/103129126259.html");
+        System.out.println(html);
     }
 
     /**

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -26,8 +27,8 @@ public class NtKeHouse {
     private String communityName;
     private String area1;
     private String area2;
-    private Double unitPrice;
-    private Double price;//总价
+    private BigDecimal unitPrice;
+    private BigDecimal price;//总价
     private Double jzArea;//建筑面积
     private String houseType;//户型结构
     private Integer follow;//关注人数
@@ -52,8 +53,8 @@ public class NtKeHouse {
     private String age;//房屋年限
     private Integer status; //'0 下架 1 卖出 '
 
-    private Double changeUnitPrice;//价格变化
-    private Double changePrice;//价格变化
+    private BigDecimal changeUnitPrice;//价格变化
+    private BigDecimal changePrice;//价格变化
 
 
 }

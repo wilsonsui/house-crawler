@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -18,8 +19,8 @@ public class NtKeHouseChange {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private Integer houseId;
-    private Double unitPrice;
-    private Double price;
+    private BigDecimal unitPrice;
+    private BigDecimal price;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
