@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    password: 12345678
+    username: root
+    url: jdbc:mysql://127.0.0.1:3306/ke_house?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+server:
+  port: 8000
+
+#
