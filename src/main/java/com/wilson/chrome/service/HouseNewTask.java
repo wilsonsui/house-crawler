@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import static com.wilson.util.UrlListUtil.allUrlList;
  */
 @Slf4j
 @SpringBootTest
+@Component
 public class HouseNewTask {
     @Autowired
     CrawleListService crawleListService;
@@ -31,16 +34,22 @@ public class HouseNewTask {
     @Autowired
     HouseService houseService;
 
+    @Scheduled(cron = "0 0/50 * * * ?")
     @Test
     public void 爬详情() {
         System.setProperty("webdriver.chrome.driver", "/Users/suishunli/Desktop/selenium/chromedriver-mac-arm64/chromedriver");
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        ExecutorService executorService = Executors.newFixedThreadPool(7);
         long l = System.currentTimeMillis();
         while (true) {
             //查询前10条
             List<House> houseList = houseService.list(new QueryWrapper<House>()
-                    .isNull("area1")
-                    .last("limit 11"));
+                            .isNull("area1")
+//                    .isNull("cl_area")
+                            .isNull("status")
+//                            .eq("status", 0)
+//                    .orderByAsc("create_time")
+                            .last("limit 7")
+            );
             if (CollectionUtil.isEmpty(houseList)) {
                 break;
             }
@@ -48,6 +57,11 @@ public class HouseNewTask {
             houseList.forEach(house -> {
                 Future<?> submit = executorService.submit(() -> {
                     crawleListService.crawDetail(house);
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(800);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 });
                 list.add(submit);
             });
@@ -60,20 +74,28 @@ public class HouseNewTask {
                     throw new RuntimeException(e);
                 }
             }
+//            break;
         }
 
         log.error("总耗时:{}", System.currentTimeMillis() - l);
     }
 
+    //每30分钟执行一次
+    @Scheduled(cron = "0 0/30 * * * ?")
     @Test
-    public void 爬列表() {
+    public void 爬列表()   {
         System.setProperty("webdriver.chrome.driver", "/Users/suishunli/Desktop/selenium/chromedriver-mac-arm64/chromedriver");
-        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        ExecutorService executorService = Executors.newFixedThreadPool(7);
         long l = System.currentTimeMillis();
         List<Future<?>> list = new ArrayList<>();
         allUrlList.forEach(url -> {
             Future<?> submit = executorService.submit(() -> {
                 crawleListService.crawlList(url);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(800);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             });
             list.add(submit);
         });

@@ -123,6 +123,7 @@ public class ParseHtmlUtil {
         //崇川区 虹桥
         String text = document.selectFirst("div[class=areaName]")
                 .selectFirst("span[class=info]").text();
+        updateHouse.setStatus(null);
         updateHouse.setArea1(text.split(" ")[0]);
         updateHouse.setArea2(text.split(" ")[1]);
         updateHouse.setPrice(BigDecimal.valueOf(Double.parseDouble(document.selectFirst("span[class=total]").text().replace("万", ""))));
@@ -164,6 +165,19 @@ public class ParseHtmlUtil {
                 updateHouse.setAge(span.replace("房屋年限", "").trim());
             }
         }
+
+        //房屋的测量面积
+        BigDecimal cLArea = new BigDecimal("0");
+        Elements elements = document.select("div[class=row]");
+        for (Element element : elements) {
+            Elements cols = element.select(".col");
+            if (cols.size() > 1) {
+                Element secondCol = cols.get(1);
+                String txt = secondCol.text().replace("平米", "");
+                cLArea = cLArea.add(new BigDecimal(txt));
+            }
+        }
+        updateHouse.setClArea(cLArea);
     }
 
 

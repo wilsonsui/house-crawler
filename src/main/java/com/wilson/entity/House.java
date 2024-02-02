@@ -1,9 +1,6 @@
 package com.wilson.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.ToString;
@@ -27,6 +24,7 @@ public class House {
     private BigDecimal unitPrice;
     private BigDecimal price;//总价
     private Double jzArea;//建筑面积
+    private BigDecimal clArea;//测量面积
     private String houseType;//户型结构
     private Integer follow;//关注人数
     private String unitType;//户型
@@ -47,6 +45,7 @@ public class House {
     private Date createTime;//创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;//更新时间
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Integer status; //'0 下架 1 卖出 '
     private BigDecimal changeUnitPrice;//价格变化
     private BigDecimal changePrice;//价格变化
@@ -55,9 +54,6 @@ public class House {
 
     @TableField(exist = false)
     private List<HouseTraffic> houseTrafficList;
-
-
-
 
 
 }

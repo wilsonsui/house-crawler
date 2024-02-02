@@ -6,7 +6,6 @@ import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wilson.entity.House;
 import com.wilson.mapper.HouseMapper;
-import com.wilson.task.HouseTask;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -59,6 +58,9 @@ public class CrawlerUtil {
                     house.setId(null);
                     if (house.getCommunityUrl().contains("su.ke")) {
                         house.setArea("苏州");
+                    }
+                    if (house.getCommunityUrl().contains("sh.ke")) {
+                        house.setArea("上海");
                     }
                     if (house.getCommunityUrl().contains("nt.ke")) {
                         house.setArea("南通");

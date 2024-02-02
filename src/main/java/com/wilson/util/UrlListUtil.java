@@ -16,6 +16,17 @@ public class UrlListUtil {
     public static Set<String> allUrlList = new LinkedHashSet<>();
 
     static {
+        //上海
+        allUrlList.add("https://sh.ke.com/ershoufang/pudong/sf1a3a4a5a6a7l2l3l4l5l6p2/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/minhang/su1a3a4a5a6a7l2l3l4l5l6p2p3/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/putuo/sf1a3a4a5a6a7l2l3l4l5l6p2/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/baoshan/su1sf1a3a4a5l2l3p1p2/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/yangpu/sf1a3a4a5a6a7l2l3l4l5l6p2/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/songjiang/sf1a3a4a5a6a7l2l3l4l5l6p2/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/jiading/sf1a3a4a5a6a7l2l3l4l5l6p2/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/qingpu/su1sf1a3a4a5l2l3p1p2/");
+//        allUrlList.add("https://sh.ke.com/ershoufang/fengxian/su1sf1a3a4a5l2l3p1p2/");
+
         //苏州 90页
         allUrlList.add("https://su.ke.com/ershoufang/wuzhong/su1dp1ie2sf1a3a4a5l3l4l5l6p2p3p4/");
         allUrlList.add("https://su.ke.com/ershoufang/gusu/su1dp1ie2sf1a3a4a5l3l4l5l6p2p3p4/");
@@ -23,6 +34,7 @@ public class UrlListUtil {
         allUrlList.add("https://su.ke.com/ershoufang/wujiang/su1dp1ie2sf1a3a4a5l3l4l5l6p2p3p4/");
         allUrlList.add("https://su.ke.com/ershoufang/kunshan/su1dp1ie2sf1a3a4a5l3l4l5l6p2p3p4/");
         allUrlList.add("https://su.ke.com/ershoufang/gongyeyuan/su1dp1ie2sf1a3a4a5l3l4l5l6p2p3p4/");
+        allUrlList.add("https://su.ke.com/ershoufang/xiangcheng/su1dp1ie2sf1a3a4a5l3l4l5l6p2p3p4/");
 
 
         //南通四大区 近地铁， 最大60页

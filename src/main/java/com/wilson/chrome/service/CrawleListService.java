@@ -46,7 +46,7 @@ public class CrawleListService {
     HousePriceService housePriceService;
 
     public void crawlList(String url) {
-        log.error("爬取一个列表数据开始:{}", url);
+//        log.error("爬取一个列表数据开始:{}", url);
         WebDriver webDriver = createWebDriver();
         try {
             // 进行爬取逻辑，将数据保存到数据库
@@ -54,11 +54,17 @@ public class CrawleListService {
             String pageSource = webDriver.getPageSource();
             List<House> houseList = ParseHtmlUtil.parseList(pageSource);
             while (true) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(700);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 List<WebElement> webElements = webDriver.findElements(By.linkText("下一页"));
                 if (webElements.size() <= 0) {
                     break;
                 }
                 webElements.get(0).click();
+
                 pageSource = webDriver.getPageSource();
                 houseList.addAll(ParseHtmlUtil.parseList(pageSource));
             }
@@ -69,6 +75,7 @@ public class CrawleListService {
             log.error("爬取列表数据异常:{}", e.getMessage());
         } finally {
             // 关闭 WebDriver
+            webDriver.close();
             webDriver.quit();
         }
     }
@@ -83,9 +90,15 @@ public class CrawleListService {
             webDriver.get(houseUrl);
             htmlDetail = webDriver.getPageSource();
             if (htmlDetail.contains("未找到页面")) {
-                houseService.removeById(houseDetail.getId());
-                houseTrafficService.remove(new QueryWrapper<HouseTraffic>().eq("house_id", houseDetail.getId()));
-                housePriceService.remove(new QueryWrapper<HousePrice>().eq("house_id", houseDetail.getId()));
+                log.error("找不到页面:{}", houseUrl);
+                House house = new House();
+                house.setId(houseDetail.getId());
+                if (houseDetail.getStatus() == null || houseDetail.getStatus() == 0) {//原来已经是0了 再次找不到就设置为1
+                    house.setStatus(1);
+                } else {
+                    house.setStatus(0);
+                }
+                houseService.updateById(house);
                 return;
             }
             ParseHtmlUtil.parseDetail(htmlDetail, houseDetail);

@@ -88,6 +88,9 @@ public class HouseService extends ServiceImpl<HouseMapper, House> {
 
     public void saveHouse(House house) {
         house.setId(null);
+        if (house.getCommunityUrl().contains("sh.ke")) {
+            house.setArea("上海");
+        }
         if (house.getCommunityUrl().contains("su.ke")) {
             house.setArea("苏州");
         }
@@ -105,6 +108,12 @@ public class HouseService extends ServiceImpl<HouseMapper, House> {
                 house.setUpdateTime(new Date());
                 //价格发生变化了 就保存价格·
                 int compareTo = houseDB.getPrice().compareTo(house.getPrice());
+                //旧价格大于新价格 打印降价
+                if (compareTo > 0) {
+                    log.error("价格降↓:{},原价:{},现价:{},降价{}万元,区域:{}-{}", house.getUrl(), houseDB.getPrice(), house.getPrice(), houseDB.getPrice().subtract(house.getPrice()), houseDB.getArea1(), houseDB.getArea2());
+                } else if (compareTo < 0) {
+                    log.error("价格涨↑:{},原价:{},现价:{},涨价{}万元,区域:{}-{}", house.getUrl(), houseDB.getPrice(), house.getPrice(), house.getPrice().subtract(houseDB.getPrice()), houseDB.getArea1(), houseDB.getArea2());
+                }
                 if (compareTo != 0) {
                     //记录价格变化，每次价格变动时的变化幅度
                     house.setChangePrice(houseDB.getPrice().subtract(house.getPrice()));//价格变化幅度
@@ -131,6 +140,7 @@ public class HouseService extends ServiceImpl<HouseMapper, House> {
                     }
                 }
             } else {
+//                log.error("新增房屋:{}", house.getUrl());
                 house.setCreateTime(new Date());
                 houseMapper.insert(house);
 

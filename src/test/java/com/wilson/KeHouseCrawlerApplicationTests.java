@@ -3,7 +3,6 @@ package com.wilson;
 import com.wilson.chrome.service.CrawleService;
 import com.wilson.entity.House;
 import com.wilson.mapper.HouseMapper;
-import com.wilson.task.HouseTask;
 import com.wilson.util.UrlListUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,6 @@ import static com.wilson.util.UrlListUtil.allUrlList;
 @Slf4j
 @SpringBootTest
 class KeHouseCrawlerApplicationTests {
-    @Resource
-    HouseTask houseTask;
 
     @Resource
     HouseMapper houseMapper;
@@ -37,17 +34,5 @@ class KeHouseCrawlerApplicationTests {
         });
         log.error("总耗时:{}", System.currentTimeMillis() - l);
     }
-
-
-    @Test
-    void 抓去列表() {
-        houseTask.list();
-    }
-
-    @Test
-    void 更新列表() {
-        houseTask.updateDatail();
-    }
-
 
 }
