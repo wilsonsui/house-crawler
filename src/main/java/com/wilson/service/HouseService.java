@@ -144,6 +144,12 @@ public class HouseService extends ServiceImpl<HouseMapper, House> {
                 house.setCreateTime(new Date());
                 houseMapper.insert(house);
 
+                HousePrice housePrice = new HousePrice();
+                housePrice.setHouseId(house.getId());
+                housePrice.setPrice(house.getPrice());
+                housePrice.setCreateTime(new Date());
+                housePriceMapper.insert(housePrice);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

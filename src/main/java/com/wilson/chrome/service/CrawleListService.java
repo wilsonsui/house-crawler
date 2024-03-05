@@ -90,7 +90,7 @@ public class CrawleListService {
             webDriver.get(houseUrl);
             htmlDetail = webDriver.getPageSource();
             if (htmlDetail.contains("未找到页面")) {
-                log.error("找不到页面:{}", houseUrl);
+                log.error("找不到页面 houseId:{}", houseDetail.getId());
                 House house = new House();
                 house.setId(houseDetail.getId());
                 if (houseDetail.getStatus() == null || houseDetail.getStatus() == 0) {//原来已经是0了 再次找不到就设置为1

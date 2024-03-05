@@ -38,7 +38,7 @@ public class HouseNewTask {
     @Test
     public void 爬详情() {
         System.setProperty("webdriver.chrome.driver", "/Users/suishunli/Desktop/selenium/chromedriver-mac-arm64/chromedriver");
-        ExecutorService executorService = Executors.newFixedThreadPool(7);
+        ExecutorService executorService = Executors.newFixedThreadPool(11);
         long l = System.currentTimeMillis();
         while (true) {
             //查询前10条
@@ -81,11 +81,12 @@ public class HouseNewTask {
     }
 
     //每30分钟执行一次
+
     @Scheduled(cron = "0 0/30 * * * ?")
     @Test
     public void 爬列表()   {
         System.setProperty("webdriver.chrome.driver", "/Users/suishunli/Desktop/selenium/chromedriver-mac-arm64/chromedriver");
-        ExecutorService executorService = Executors.newFixedThreadPool(7);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
         long l = System.currentTimeMillis();
         List<Future<?>> list = new ArrayList<>();
         allUrlList.forEach(url -> {
