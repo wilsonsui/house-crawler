@@ -19,6 +19,7 @@ public class UrlListUtil {
         //上海
         allUrlList.add("https://sh.ke.com/ershoufang/pudong/sf1a3a4a5a6a7l2l3l4l5l6p2/");
         allUrlList.add("https://sh.ke.com/ershoufang/pudong/su1sf1a3a4a5a6a7l2l3l4l5l6p3/");
+        allUrlList.add("https://sh.ke.com/ershoufang/kangqiao/ie2sf1a3a4a5a6a7p4/");
 //        allUrlList.add("https://sh.ke.com/ershoufang/minhang/su1a3a4a5a6a7l2l3l4l5l6p2p3/");
 //        allUrlList.add("https://sh.ke.com/ershoufang/putuo/sf1a3a4a5a6a7l2l3l4l5l6p2/");
 //        allUrlList.add("https://sh.ke.com/ershoufang/baoshan/su1sf1a3a4a5l2l3p1p2/");

@@ -110,9 +110,9 @@ public class HouseService extends ServiceImpl<HouseMapper, House> {
                 int compareTo = houseDB.getPrice().compareTo(house.getPrice());
                 //旧价格大于新价格 打印降价
                 if (compareTo > 0) {
-                    log.error("价格降↓:{},原价:{},现价:{},降价{}万元,区域:{}-{}", house.getUrl(), houseDB.getPrice(), house.getPrice(), houseDB.getPrice().subtract(house.getPrice()), houseDB.getArea1(), houseDB.getArea2());
+                    log.error("价格降↓:{},原价:{},现价:{},降价{}万元,区域:{}-{},小区：{}", house.getUrl(), houseDB.getPrice(), house.getPrice(), houseDB.getPrice().subtract(house.getPrice()), houseDB.getArea1(), houseDB.getArea2(), house.getCommunityName());
                 } else if (compareTo < 0) {
-                    log.error("价格涨↑:{},原价:{},现价:{},涨价{}万元,区域:{}-{}", house.getUrl(), houseDB.getPrice(), house.getPrice(), house.getPrice().subtract(houseDB.getPrice()), houseDB.getArea1(), houseDB.getArea2());
+                    log.error("价格涨↑:{},原价:{},现价:{},涨价{}万元,区域:{}-{},小区：{}", house.getUrl(), houseDB.getPrice(), house.getPrice(), house.getPrice().subtract(houseDB.getPrice()), houseDB.getArea1(), houseDB.getArea2(), house.getCommunityName());
                 }
                 if (compareTo != 0) {
                     //记录价格变化，每次价格变动时的变化幅度

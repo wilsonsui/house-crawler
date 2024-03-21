@@ -1,8 +1,9 @@
-package com.wilson.chrome.service;
+package com.wilson.chrome;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.wilson.chrome.CustomQueue;
+import com.wilson.chrome.service.CrawleListService;
 import com.wilson.entity.House;
 import com.wilson.service.HouseService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -78,13 +80,24 @@ public class HouseNewTask {
         }
 
         log.error("总耗时:{}", System.currentTimeMillis() - l);
+        try {
+            Process process = Runtime.getRuntime().exec("killall chromedriver");
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("chromedriver进程已成功终止。");
+            } else {
+                System.out.println("终止chromedriver进程时出现错误。");
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     //每30分钟执行一次
 
     @Scheduled(cron = "0 0/30 * * * ?")
     @Test
-    public void 爬列表()   {
+    public void 爬列表() {
         System.setProperty("webdriver.chrome.driver", "/Users/suishunli/Desktop/selenium/chromedriver-mac-arm64/chromedriver");
         ExecutorService executorService = Executors.newFixedThreadPool(2);
         long l = System.currentTimeMillis();
@@ -110,5 +123,16 @@ public class HouseNewTask {
             }
         }
         log.error("总耗时:{}", System.currentTimeMillis() - l);
+        try {
+            Process process = Runtime.getRuntime().exec("killall chromedriver");
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("chromedriver进程已成功终止。");
+            } else {
+                System.out.println("终止chromedriver进程时出现错误。");
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

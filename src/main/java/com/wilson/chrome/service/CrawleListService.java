@@ -15,6 +15,7 @@ import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -112,17 +113,19 @@ public class CrawleListService {
             String trafficHtmlDetail = webDriver.getPageSource();
             List<HouseTraffic> houseTrafficList = ParseHtmlUtil.parseTraffic(trafficHtmlDetail);
             houseDetail.setHouseTrafficList(houseTrafficList);
+            log.error("url:{},位置:{} 小区:{}", houseDetail.getUrl(), houseDetail.getArea2(),houseDetail.getCommunityName());
             houseService.saveHouse(houseDetail);
         } catch (Exception e) {
             log.error("抓取详情报错:{},{}", e.getMessage(), houseDetail.getUrl());
         } finally {
-            webDriver.quit();
+            webDriver.close();
         }
     }
 
 
     private static WebDriver createWebDriver() {
-        ChromeOptions options = new ChromeOptions();
+        ChromeOptions options = new ChromeOptions()
+                ;
         Logger.getLogger("org.openqa.selenium").setLevel(Level.WARNING);
         options.setHeadless(true);//无头模式,后端运行
         options.addArguments("--remote-allow-origins=*");//允许跨域

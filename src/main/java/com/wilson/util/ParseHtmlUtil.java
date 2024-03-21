@@ -117,7 +117,6 @@ public class ParseHtmlUtil {
 
 
     public static void parseDetail(String htmlDetail, House updateHouse) {
-        log.error("抓取详情链接:{}", updateHouse.getUrl());
         updateHouse.setUpdateTime(new Date());
         Document document = Jsoup.parse(htmlDetail);
         //崇川区 虹桥
